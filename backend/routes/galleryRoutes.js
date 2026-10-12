@@ -1,0 +1,17 @@
+import express from 'express';
+import {
+  getGallery,
+  createGalleryItem,
+  updateGalleryItem,
+  deleteGalleryItem,
+} from '../controllers/galleryController.js';
+import { protect, authorize } from '../middleware/auth.js';
+
+const router = express.Router();
+
+router.get('/', getGallery);
+router.post('/', protect, authorize('SUPER_ADMIN', 'ADMIN'), createGalleryItem);
+router.patch('/:id', protect, authorize('SUPER_ADMIN', 'ADMIN'), updateGalleryItem);
+router.delete('/:id', protect, authorize('SUPER_ADMIN', 'ADMIN'), deleteGalleryItem);
+
+export default router;
