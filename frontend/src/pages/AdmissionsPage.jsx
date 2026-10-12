@@ -567,10 +567,6 @@ export default function AdmissionsPage() {
                 <Mail className="w-3.5 h-3.5 text-zips-green-800 flex-shrink-0" />
                 <a href={`mailto:${SCHOOL_INFO.email}`} className="hover:underline">{SCHOOL_INFO.email}</a>
               </div>
-              <div className="flex items-center gap-2">
-                <Globe className="w-3.5 h-3.5 text-zips-green-800 flex-shrink-0" />
-                <a href={SCHOOL_INFO.social.website} target="_blank" rel="noopener noreferrer" className="hover:underline">www.zips.org.in</a>
-              </div>
             </div>
           </div>
         </div>

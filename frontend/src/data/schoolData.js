@@ -18,7 +18,6 @@ export const SCHOOL_INFO = {
     instagram: 'https://www.instagram.com/zipsaligarh/',
     facebook: 'https://www.facebook.com',
     youtube: 'https://www.youtube.com',
-    website: 'https://zips.org.in/',
   },
   academicSession: '2026-2027',
   gradesOffered: 'Nursery to Class VIII (Expanding to Higher Grades)',
