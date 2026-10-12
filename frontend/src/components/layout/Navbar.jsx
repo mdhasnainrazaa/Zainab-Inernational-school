@@ -105,15 +105,6 @@ export default function Navbar({ onOpenEnquiry }) {
               >
                 <Youtube className="w-3.5 h-3.5" />
               </a>
-              <a
-                href={SCHOOL_INFO.social.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Official Portal"
-                className="w-6 h-6 rounded-full bg-white/10 hover:bg-zips-gold-500 hover:text-zips-green-950 flex items-center justify-center transition-all duration-200"
-              >
-                <Globe className="w-3.5 h-3.5" />
-              </a>
             </div>
           </div>
         </div>

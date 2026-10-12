@@ -100,15 +100,6 @@ export default function Footer({ onOpenEnquiry }) {
               >
                 <Youtube className="w-4 h-4" />
               </a>
-              <a
-                href={SCHOOL_INFO.social.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-white/10 hover:bg-zips-gold-500 hover:text-zips-green-950 flex items-center justify-center transition-all shadow-sm"
-                aria-label="Official Website"
-              >
-                <ExternalLink className="w-4 h-4" />
-              </a>
             </div>
           </div>
 
