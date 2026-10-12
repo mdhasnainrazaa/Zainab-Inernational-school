@@ -1,10 +1,13 @@
 import axios from 'axios';
 
-const API_BASE = import.meta.env.VITE_API_URL || '/api';
+// Ensure baseURL always ends with /api even if user sets VITE_API_URL to the root domain
+const rawBase = import.meta.env.VITE_API_URL || '/api';
+const cleanBase = rawBase.replace(/\/+$/, ''); // strip trailing slash
+const API_BASE = cleanBase.endsWith('/api') ? cleanBase : `${cleanBase}/api`;
 
 const apiClient = axios.create({
   baseURL: API_BASE,
-  timeout: 15000,
+  timeout: 25000, // increased timeout for Render free tier cold starts
   headers: {
     'Content-Type': 'application/json',
   },
