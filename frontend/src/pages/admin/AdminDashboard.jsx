@@ -79,7 +79,7 @@ export default function AdminDashboard() {
             Welcome to ZIPS Administrative Portal
           </h2>
           <p className="text-xs sm:text-sm text-gray-300 mt-1 max-w-xl">
-            Connected to real-time MongoDB Atlas database. Manage live admission leads, schedule student campus tours, and publish school notices.
+            Manage live admission leads, schedule student campus tours, and publish school notices.
           </p>
         </div>
 

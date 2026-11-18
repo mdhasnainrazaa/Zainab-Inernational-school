@@ -32,13 +32,6 @@ import { errorHandler } from './middleware/errorHandler.js';
 // Route Imports
 import authRoutes from './routes/authRoutes.js';
 import enquiryRoutes from './routes/enquiryRoutes.js';
-import blogRoutes from './routes/blogRoutes.js';
-import activityRoutes from './routes/activityRoutes.js';
-import eventRoutes from './routes/eventRoutes.js';
-import facilityRoutes from './routes/facilityRoutes.js';
-import galleryRoutes from './routes/galleryRoutes.js';
-import testimonialRoutes from './routes/testimonialRoutes.js';
-import settingRoutes from './routes/settingRoutes.js';
 import noticeRoutes from './routes/noticeRoutes.js';
 // Initialize DB
 connectDB();
@@ -115,13 +108,6 @@ app.get('/api/health', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/enquiries', enquiryRoutes);
-app.use('/api/blogs', blogRoutes);
-app.use('/api/activities', activityRoutes);
-app.use('/api/events', eventRoutes);
-app.use('/api/facilities', facilityRoutes);
-app.use('/api/gallery', galleryRoutes);
-app.use('/api/testimonials', testimonialRoutes);
-app.use('/api/settings', settingRoutes);
 app.use('/api/notices', noticeRoutes);
 
 // Error handling middleware

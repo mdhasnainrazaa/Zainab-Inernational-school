@@ -105,8 +105,39 @@ enquirySchema.index({ parentName: 'text', studentName: 'text', phoneNumber: 'tex
 
 enquirySchema.pre('save', async function (next) {
   if (!this.enquiryId) {
-    const randomHex = Math.floor(1000 + Math.random() * 9000);
-    this.enquiryId = `ZIPS-${new Date().getFullYear()}-${randomHex}`;
+    const currentYear = new Date().getFullYear();
+    const prefix = `ZIPS-${currentYear}-`;
+
+    try {
+      // Find all existing enquiries for this year with numeric suffix (e.g. ZIPS-2026-1)
+      const existing = await mongoose.model('Enquiry').find(
+        { enquiryId: new RegExp(`^${prefix}\\d+$`) },
+        { enquiryId: 1 }
+      ).lean();
+
+      let maxSeq = 0;
+      for (const item of existing) {
+        if (item.enquiryId) {
+          const parts = item.enquiryId.split('-');
+          const seq = parseInt(parts[parts.length - 1], 10);
+          if (!isNaN(seq) && seq > maxSeq) {
+            maxSeq = seq;
+          }
+        }
+      }
+
+      let nextSeq = maxSeq + 1;
+      let candidateId = `${prefix}${nextSeq}`;
+
+      while (await mongoose.model('Enquiry').exists({ enquiryId: candidateId })) {
+        nextSeq += 1;
+        candidateId = `${prefix}${nextSeq}`;
+      }
+
+      this.enquiryId = candidateId;
+    } catch (err) {
+      this.enquiryId = `${prefix}1`;
+    }
   }
   next();
 });

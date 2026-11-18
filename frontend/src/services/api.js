@@ -113,38 +113,7 @@ export const api = {
     return res.data;
   },
 
-  // 3. Blogs & Articles API
-  async getBlogs(params = {}) {
-    const res = await apiClient.get('/blogs', { params });
-    return res.data;
-  },
-
-  async getAdminBlogs() {
-    const res = await apiClient.get('/blogs/admin');
-    return res.data;
-  },
-
-  async getBlogBySlug(slug) {
-    const res = await apiClient.get(`/blogs/${slug}`);
-    return res.data;
-  },
-
-  async createBlog(blogData) {
-    const res = await apiClient.post('/blogs', blogData);
-    return res.data;
-  },
-
-  async updateBlog(id, blogData) {
-    const res = await apiClient.patch(`/blogs/${id}`, blogData);
-    return res.data;
-  },
-
-  async deleteBlog(id) {
-    const res = await apiClient.delete(`/blogs/${id}`);
-    return res.data;
-  },
-
-  // 4. Notice Board & Announcements API
+  // 3. Notice Board & Announcements API
   async getNotices(params = {}) {
     const res = await apiClient.get('/notices', { params });
     return res.data;
@@ -175,120 +144,13 @@ export const api = {
     return res.data;
   },
 
-  // 5. Events & Calendar API
-  async getEvents() {
-    const res = await apiClient.get('/events');
-    return res.data;
+  // 4. Safe fallbacks for deprecated public blog pages
+  async getBlogs() {
+    return { success: true, count: 0, blogs: [] };
   },
 
-  async createEvent(data) {
-    const res = await apiClient.post('/events', data);
-    return res.data;
-  },
-
-  async updateEvent(id, data) {
-    const res = await apiClient.patch(`/events/${id}`, data);
-    return res.data;
-  },
-
-  async deleteEvent(id) {
-    const res = await apiClient.delete(`/events/${id}`);
-    return res.data;
-  },
-
-  // 6. Facilities API
-  async getFacilities() {
-    const res = await apiClient.get('/facilities');
-    return res.data;
-  },
-
-  async createFacility(data) {
-    const res = await apiClient.post('/facilities', data);
-    return res.data;
-  },
-
-  async updateFacility(id, data) {
-    const res = await apiClient.patch(`/facilities/${id}`, data);
-    return res.data;
-  },
-
-  async deleteFacility(id) {
-    const res = await apiClient.delete(`/facilities/${id}`);
-    return res.data;
-  },
-
-  // 7. Activities (Beyond Academics) API
-  async getActivities() {
-    const res = await apiClient.get('/activities');
-    return res.data;
-  },
-
-  async createActivity(data) {
-    const res = await apiClient.post('/activities', data);
-    return res.data;
-  },
-
-  async updateActivity(id, data) {
-    const res = await apiClient.patch(`/activities/${id}`, data);
-    return res.data;
-  },
-
-  async deleteActivity(id) {
-    const res = await apiClient.delete(`/activities/${id}`);
-    return res.data;
-  },
-
-  // 8. Media Gallery API
-  async getGallery() {
-    const res = await apiClient.get('/gallery');
-    return res.data;
-  },
-
-  async createGalleryItem(data) {
-    const res = await apiClient.post('/gallery', data);
-    return res.data;
-  },
-
-  async updateGalleryItem(id, data) {
-    const res = await apiClient.patch(`/gallery/${id}`, data);
-    return res.data;
-  },
-
-  async deleteGalleryItem(id) {
-    const res = await apiClient.delete(`/gallery/${id}`);
-    return res.data;
-  },
-
-  // 9. Testimonials API
-  async getTestimonials() {
-    const res = await apiClient.get('/testimonials');
-    return res.data;
-  },
-
-  async createTestimonial(data) {
-    const res = await apiClient.post('/testimonials', data);
-    return res.data;
-  },
-
-  async updateTestimonial(id, data) {
-    const res = await apiClient.patch(`/testimonials/${id}`, data);
-    return res.data;
-  },
-
-  async deleteTestimonial(id) {
-    const res = await apiClient.delete(`/testimonials/${id}`);
-    return res.data;
-  },
-
-  // 10. Site Settings API
-  async getSettings() {
-    const res = await apiClient.get('/settings');
-    return res.data;
-  },
-
-  async updateSettings(data) {
-    const res = await apiClient.patch('/settings', data);
-    return res.data;
+  async getBlogBySlug() {
+    return { success: false, message: 'Blog feature discontinued' };
   },
 };
 

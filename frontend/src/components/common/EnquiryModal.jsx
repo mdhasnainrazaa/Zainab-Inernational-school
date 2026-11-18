@@ -35,7 +35,7 @@ export default function EnquiryModal({ isOpen, onClose }) {
     setSubmitting(true);
     try {
       const res = await api.submitEnquiry(data);
-      setSubmittedId(res.enquiryId || 'ZIPS-2026-SUBMITTED');
+      setSubmittedId(res.enquiryId || 'ZIPS-2026-1');
       reset();
     } catch (err) {
       alert('Error submitting enquiry. Please call us directly.');
