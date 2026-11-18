@@ -191,18 +191,25 @@ export default function AdminDashboard() {
               <thead className="bg-gray-50 text-gray-600 uppercase tracking-wider font-semibold border-b border-gray-200">
                 <tr>
                   <th className="p-4">Ref ID</th>
+                  <th className="p-4">Submission Date</th>
                   <th className="p-4">Parent Name</th>
                   <th className="p-4">Student</th>
                   <th className="p-4">Class</th>
                   <th className="p-4">Phone</th>
                   <th className="p-4">Tour Req.</th>
-                  <th className="p-4">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {enquiries.slice(0, 5).map((enq) => (
                   <tr key={enq._id} className="hover:bg-gray-50/80 transition-colors">
                     <td className="p-4 font-mono font-bold text-zips-green-900">{enq.enquiryId}</td>
+                    <td className="p-4 whitespace-nowrap text-gray-700 font-medium">
+                      {new Date(enq.createdAt).toLocaleDateString('en-IN', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric',
+                      })}
+                    </td>
                     <td className="p-4 font-semibold text-zips-charcoal-900">{enq.parentName}</td>
                     <td className="p-4 text-gray-700">{enq.studentName}</td>
                     <td className="p-4 font-medium text-zips-green-950">{enq.classApplyingFor}</td>
@@ -215,21 +222,6 @@ export default function AdminDashboard() {
                       ) : (
                         <span className="text-gray-400 text-[10px]">No</span>
                       )}
-                    </td>
-                    <td className="p-4">
-                      <span
-                        className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                          enq.status === 'NEW'
-                            ? 'bg-amber-100 text-amber-800'
-                            : enq.status === 'CONTACTED'
-                            ? 'bg-blue-100 text-blue-800'
-                            : enq.status === 'QUALIFIED'
-                            ? 'bg-purple-100 text-purple-800'
-                            : 'bg-emerald-100 text-emerald-800'
-                        }`}
-                      >
-                        {enq.status}
-                      </span>
                     </td>
                   </tr>
                 ))}
