@@ -185,33 +185,11 @@ export default function AdminLayout() {
           <div className="flex items-center gap-2 sm:gap-3">
             <Link
               to="/"
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-zips-green-900 bg-zips-green-50 hover:bg-zips-green-100 border border-zips-green-200 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-zips-green-900 bg-zips-green-50 hover:bg-zips-green-100 border border-zips-green-200 transition-colors"
             >
               <ExternalLink className="w-3.5 h-3.5 text-zips-green-800" />
               <span>Live Site</span>
             </Link>
-            <button
-              onClick={() => {
-                setLogoutMode('ALL_DEVICES');
-                setShowLogoutModal(true);
-              }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-amber-900 bg-amber-50 hover:bg-amber-100 border border-amber-300 transition-colors cursor-pointer"
-              title="Instantly terminate admin sessions on all devices"
-            >
-              <ShieldAlert className="w-3.5 h-3.5 text-amber-700" />
-              <span className="hidden md:inline">Log Out All Devices</span>
-              <span className="md:hidden">Log Out All</span>
-            </button>
-            <button
-              onClick={() => {
-                setLogoutMode('THIS_DEVICE');
-                setShowLogoutModal(true);
-              }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 transition-colors cursor-pointer"
-            >
-              <LogOut className="w-3.5 h-3.5 text-red-600" />
-              <span>Sign Out</span>
-            </button>
           </div>
         </header>
 
