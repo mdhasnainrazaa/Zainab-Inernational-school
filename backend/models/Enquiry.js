@@ -115,15 +115,23 @@ enquirySchema.pre('save', async function (next) {
         { enquiryId: 1 }
       ).lean();
 
-      let maxSeq = 0;
+      // Collect numeric sequences
+      const validSeqs = [];
       for (const item of existing) {
         if (item.enquiryId) {
           const parts = item.enquiryId.split('-');
           const seq = parseInt(parts[parts.length - 1], 10);
-          if (!isNaN(seq) && seq > maxSeq) {
-            maxSeq = seq;
+          if (!isNaN(seq)) {
+            validSeqs.push(seq);
           }
         }
+      }
+
+      // If only legacy 4-digit random numbers (>= 1000) exist, ignore them so we start at 1
+      const sequentialOnly = validSeqs.filter(s => s < 1000);
+      let maxSeq = 0;
+      if (sequentialOnly.length > 0) {
+        maxSeq = Math.max(...sequentialOnly);
       }
 
       let nextSeq = maxSeq + 1;
