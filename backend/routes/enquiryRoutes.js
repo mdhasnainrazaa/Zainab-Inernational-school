@@ -24,6 +24,7 @@ const enquirySubmitLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
+  validate: { xForwardedForHeader: false },
 });
 
 // Public route for submitting enquiries

@@ -38,6 +38,9 @@ connectDB();
 
 const app = express();
 
+// Trust reverse proxy (Render, Cloudflare, load balancers)
+app.set('trust proxy', 1);
+
 // Enable high-efficiency Gzip/Deflate compression for all response payloads
 app.use(compression({
   threshold: 1024, // only compress responses above 1KB
@@ -92,9 +95,19 @@ const globalLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
+  validate: { xForwardedForHeader: false },
 });
 
 app.use('/api', globalLimiter);
+
+// Root route for Render health checks and root domain pings
+app.get('/', (req, res) => {
+  res.status(200).json({
+    status: 'online',
+    institution: 'Zainab International Public School (ZIPS)',
+    environment: process.env.NODE_ENV || 'development',
+  });
+});
 
 // API Routes
 app.get('/api/health', (req, res) => {
