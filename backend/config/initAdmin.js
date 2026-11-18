@@ -24,6 +24,12 @@ export const syncAdminUser = async () => {
 
     let admin = await User.findOne({ email: adminEmail }).select('+password');
 
+    // Purge any deprecated admin accounts so only the configured ADMIN_EMAIL can log in
+    const removedOld = await User.deleteMany({ email: { $ne: adminEmail }, role: 'SUPER_ADMIN' });
+    if (removedOld.deletedCount > 0) {
+      console.log(`🧹 [Admin Setup]: Removed ${removedOld.deletedCount} deprecated admin account(s).`);
+    }
+
     if (!admin) {
       // Create new Admin user
       admin = await User.create({
