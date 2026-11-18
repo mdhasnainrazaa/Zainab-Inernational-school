@@ -2,9 +2,9 @@ import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 import { isNonEmptyString, sanitizeString } from '../utils/security.js';
 
-const generateToken = (id) => {
+const generateToken = (id, tokenVersion = 0) => {
   const secret = process.env.JWT_SECRET || 'zips_academic_institution_secure_jwt_key_2026';
-  return jwt.sign({ id }, secret, {
+  return jwt.sign({ id, tokenVersion }, secret, {
     expiresIn: '7d', // Hardened from 30d to 7d for enhanced administrative session security
   });
 };
@@ -43,7 +43,7 @@ export const login = async (req, res, next) => {
     user.lastLogin = new Date();
     await user.save();
 
-    const token = generateToken(user._id);
+    const token = generateToken(user._id, user.tokenVersion || 0);
 
     // Set HTTP-only cookie
     const options = {
@@ -83,6 +83,34 @@ export const logout = async (req, res) => {
     success: true,
     message: 'Logged out successfully',
   });
+};
+
+// @desc   Admin Logout From All Devices
+// @route  POST /api/auth/logout-all
+// @access Private
+export const logoutAll = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    // Increment tokenVersion to immediately invalidate all active JWT tokens across all devices
+    user.tokenVersion = (user.tokenVersion || 0) + 1;
+    await user.save();
+
+    res.cookie('token', 'none', {
+      expires: new Date(Date.now() + 10 * 1000),
+      httpOnly: true,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: 'Successfully logged out from all devices.',
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 // @desc   Get Current Logged in User

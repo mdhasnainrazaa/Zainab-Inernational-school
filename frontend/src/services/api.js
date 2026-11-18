@@ -72,6 +72,15 @@ export const api = {
     return { success: true };
   },
 
+  async logoutAll() {
+    try {
+      await apiClient.post('/auth/logout-all');
+    } catch (_) {}
+    localStorage.removeItem('zips_token');
+    localStorage.removeItem('zips_user');
+    return { success: true };
+  },
+
   async getMe() {
     const res = await apiClient.get('/auth/me');
     return res.data;

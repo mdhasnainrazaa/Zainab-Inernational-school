@@ -44,8 +44,13 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
+  const logoutAll = async () => {
+    await api.logoutAll();
+    setUser(null);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, login, logout, logoutAll, loading, isAuthenticated: !!user }}>
       {children}
     </AuthContext.Provider>
   );

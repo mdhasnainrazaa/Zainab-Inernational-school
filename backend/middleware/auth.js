@@ -29,6 +29,14 @@ export const protect = async (req, res, next) => {
       });
     }
 
+    // Verify tokenVersion to support instant logout from all devices
+    if (decoded.tokenVersion !== undefined && decoded.tokenVersion !== (user.tokenVersion || 0)) {
+      return res.status(401).json({
+        success: false,
+        message: 'Your session has been terminated by a global logout. Please log in again.',
+      });
+    }
+
     req.user = user;
     next();
   } catch (err) {

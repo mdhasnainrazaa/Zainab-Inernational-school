@@ -9,8 +9,10 @@ import {
   X,
   ExternalLink,
   Shield,
+  ShieldAlert,
   AlertTriangle,
   ArrowRight,
+  Smartphone,
 } from 'lucide-react';
 import Logo from '../../assets/Logo';
 import { useAuth } from '../../context/AuthContext';
@@ -18,15 +20,20 @@ import { useAuth } from '../../context/AuthContext';
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [logoutMode, setLogoutMode] = useState('THIS_DEVICE'); // 'THIS_DEVICE' | 'ALL_DEVICES'
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const { user, logout } = useAuth();
+  const { user, logout, logoutAll } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
   const handleConfirmLogout = async () => {
     setIsLoggingOut(true);
     try {
-      await logout();
+      if (logoutMode === 'ALL_DEVICES') {
+        await logoutAll();
+      } else {
+        await logout();
+      }
       setShowLogoutModal(false);
       navigate('/admin/login');
     } catch (err) {
@@ -133,13 +140,29 @@ export default function AdminLayout() {
             <ExternalLink className="w-4 h-4 text-zips-gold-400" />
             <span>View Public Website</span>
           </Link>
-          <button
-            onClick={() => setShowLogoutModal(true)}
-            className="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-xs text-red-300 hover:text-white hover:bg-red-950/60 border border-transparent hover:border-red-500/30 transition-all cursor-pointer font-medium"
-          >
-            <LogOut className="w-4 h-4 text-red-400" />
-            <span>Sign Out</span>
-          </button>
+          <div className="space-y-1.5 pt-1">
+            <button
+              onClick={() => {
+                setLogoutMode('THIS_DEVICE');
+                setShowLogoutModal(true);
+              }}
+              className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-gray-300 hover:text-white hover:bg-white/5 transition-all cursor-pointer font-medium"
+            >
+              <LogOut className="w-4 h-4 text-gray-400" />
+              <span>Sign Out (This Device)</span>
+            </button>
+            <button
+              onClick={() => {
+                setLogoutMode('ALL_DEVICES');
+                setShowLogoutModal(true);
+              }}
+              className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-amber-300 hover:text-white hover:bg-red-950/60 border border-amber-500/20 hover:border-red-500/50 transition-all cursor-pointer font-medium"
+              title="Terminate session on all logged-in devices"
+            >
+              <ShieldAlert className="w-4 h-4 text-amber-400" />
+              <span>Log Out All Devices</span>
+            </button>
+          </div>
         </div>
       </aside>
 
@@ -159,7 +182,7 @@ export default function AdminLayout() {
             </h1>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link
               to="/"
               className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-zips-green-900 bg-zips-green-50 hover:bg-zips-green-100 border border-zips-green-200 transition-colors"
@@ -168,8 +191,23 @@ export default function AdminLayout() {
               <span>Live Site</span>
             </Link>
             <button
-              onClick={() => setShowLogoutModal(true)}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 transition-colors cursor-pointer"
+              onClick={() => {
+                setLogoutMode('ALL_DEVICES');
+                setShowLogoutModal(true);
+              }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-amber-900 bg-amber-50 hover:bg-amber-100 border border-amber-300 transition-colors cursor-pointer"
+              title="Instantly terminate admin sessions on all devices"
+            >
+              <ShieldAlert className="w-3.5 h-3.5 text-amber-700" />
+              <span className="hidden md:inline">Log Out All Devices</span>
+              <span className="md:hidden">Log Out All</span>
+            </button>
+            <button
+              onClick={() => {
+                setLogoutMode('THIS_DEVICE');
+                setShowLogoutModal(true);
+              }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 transition-colors cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5 text-red-600" />
               <span>Sign Out</span>
@@ -191,18 +229,32 @@ export default function AdminLayout() {
             className="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-gray-100 p-6 sm:p-7 relative overflow-hidden transform transition-all animate-in zoom-in-95 duration-200"
           >
             {/* Top decorative accent */}
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-500 via-amber-500 to-red-500"></div>
+            <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${
+              logoutMode === 'ALL_DEVICES'
+                ? 'from-red-600 via-amber-500 to-red-600'
+                : 'from-amber-500 via-red-500 to-amber-500'
+            }`}></div>
 
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-red-100/80 border border-red-200 flex items-center justify-center flex-shrink-0 text-red-600 shadow-inner">
-                <LogOut className="w-6 h-6" />
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-inner ${
+                logoutMode === 'ALL_DEVICES'
+                  ? 'bg-red-100 border border-red-300 text-red-700'
+                  : 'bg-amber-100/80 border border-amber-200 text-amber-700'
+              }`}>
+                {logoutMode === 'ALL_DEVICES' ? (
+                  <ShieldAlert className="w-6 h-6 animate-pulse" />
+                ) : (
+                  <LogOut className="w-6 h-6" />
+                )}
               </div>
               <div className="flex-1">
                 <h3 className="text-lg font-bold text-gray-900 tracking-tight">
-                  Confirm Sign Out
+                  {logoutMode === 'ALL_DEVICES' ? 'Log Out From All Devices?' : 'Confirm Sign Out'}
                 </h3>
                 <p className="mt-1 text-xs text-gray-500 leading-relaxed">
-                  Are you sure you want to end your administrative session? You will need to enter your credentials again to log back in.
+                  {logoutMode === 'ALL_DEVICES'
+                    ? 'This will instantly invalidate all active administrative sessions across every computer, phone, and tablet where this admin account is currently logged in. Any open admin panel will be forced to log out immediately.'
+                    : 'Are you sure you want to end your administrative session on this device? You will need to enter your credentials again to log back in.'}
                 </p>
               </div>
             </div>
@@ -220,6 +272,27 @@ export default function AdminLayout() {
               </span>
             </div>
 
+            {/* Toggle switch option */}
+            <div className="mt-3 text-center">
+              {logoutMode === 'ALL_DEVICES' ? (
+                <button
+                  type="button"
+                  onClick={() => setLogoutMode('THIS_DEVICE')}
+                  className="text-[11px] text-gray-500 hover:text-gray-800 underline transition-colors cursor-pointer"
+                >
+                  Or sign out of this device only
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setLogoutMode('ALL_DEVICES')}
+                  className="text-[11px] text-red-600 hover:text-red-700 font-medium underline transition-colors cursor-pointer"
+                >
+                  Want to terminate sessions everywhere? Log out of all devices instead
+                </button>
+              )}
+            </div>
+
             {/* Action Buttons */}
             <div className="mt-6 flex items-center justify-end gap-3">
               <button
@@ -234,17 +307,25 @@ export default function AdminLayout() {
                 type="button"
                 onClick={handleConfirmLogout}
                 disabled={isLoggingOut}
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 active:scale-95 text-white font-semibold text-xs shadow-md shadow-red-900/20 flex items-center gap-2 transition-all cursor-pointer disabled:opacity-50"
+                className={`px-5 py-2.5 rounded-xl font-semibold text-xs shadow-md active:scale-95 text-white flex items-center gap-2 transition-all cursor-pointer disabled:opacity-50 ${
+                  logoutMode === 'ALL_DEVICES'
+                    ? 'bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 shadow-red-900/30'
+                    : 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 shadow-red-900/20'
+                }`}
               >
                 {isLoggingOut ? (
                   <>
                     <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    <span>Signing Out...</span>
+                    <span>{logoutMode === 'ALL_DEVICES' ? 'Revoking All Sessions...' : 'Signing Out...'}</span>
                   </>
                 ) : (
                   <>
-                    <LogOut className="w-3.5 h-3.5" />
-                    <span>Yes, Sign Out</span>
+                    {logoutMode === 'ALL_DEVICES' ? (
+                      <ShieldAlert className="w-3.5 h-3.5" />
+                    ) : (
+                      <LogOut className="w-3.5 h-3.5" />
+                    )}
+                    <span>{logoutMode === 'ALL_DEVICES' ? 'Log Out Everywhere' : 'Yes, Sign Out'}</span>
                   </>
                 )}
               </button>
