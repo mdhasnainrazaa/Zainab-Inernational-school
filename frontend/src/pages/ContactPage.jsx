@@ -332,8 +332,19 @@ export default function ContactPage() {
                             <Phone className="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-2.5" />
                             <input
                               type="tel"
-                              {...register('phoneNumber', { required: 'Phone number is required' })}
-                              placeholder="+91-9411030100"
+                              inputMode="numeric"
+                              maxLength={10}
+                              {...register('phoneNumber', {
+                                required: 'Phone number is required',
+                                pattern: {
+                                  value: /^[0-9]{10}$/,
+                                  message: 'Enter a valid 10-digit mobile number (numbers only)',
+                                },
+                              })}
+                              onInput={(e) => {
+                                e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                              }}
+                              placeholder="9411030100"
                               className="w-full pl-8 pr-2.5 py-1.5 rounded-lg border border-gray-300 focus:border-zips-green-600 focus:outline-none text-xs bg-gray-50 focus:bg-white"
                             />
                           </div>

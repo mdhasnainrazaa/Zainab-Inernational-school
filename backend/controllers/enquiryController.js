@@ -28,6 +28,15 @@ export const createEnquiry = async (req, res, next) => {
       });
     }
 
+    // Validate phone number: numbers only, 10 to 15 digits
+    const cleanPhone = String(phoneNumber).replace(/[\s\-\+]/g, '');
+    if (!/^\d{10,15}$/.test(cleanPhone)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please enter a valid phone number (numbers only, at least 10 digits).',
+      });
+    }
+
     const enquiry = await Enquiry.create({
       parentName: sanitizeString(parentName),
       studentName: sanitizeString(studentName),
